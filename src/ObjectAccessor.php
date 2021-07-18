@@ -33,9 +33,10 @@ class ObjectAccessor implements IObjectAccessor
         if (!$this->has($property)) {
             return false;
         }
+        $property = $this->reflection->getProperty($property);
+        $property->setAccessible(true);
 
-        return $this->reflection->getProperty($property)
-        ->isInitialized($this->object);
+        return $property->isInitialized($this->object);
     }
 
     public function get(string $property): mixed
@@ -58,6 +59,7 @@ class ObjectAccessor implements IObjectAccessor
         $property = $this->reflection->getProperty($property);
         $property->setAccessible(true);
         $property->setValue($this->object, $value);
+        
         return $this;
     }
 
