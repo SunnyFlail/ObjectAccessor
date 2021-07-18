@@ -12,12 +12,21 @@ $object = new Object();
 $objectAccessor = $accessor->access($object);
 ```
 ## Checking properties
-To check whether object has an initialised property use `ObjectAccessor::has` providing property name as an argument
+To check whether object has a property use `ObjectAccessor::has` providing property name as an argument
 ```php
 $hasProperty = $objectAccessor->has('property');
+```
+To check whether object has an initialised property use `ObjectAccessor::has` providing property name as an argument
+```php
+$hasProperty = $objectAccessor->isInitialised('property');
 ```
 ## Getting property value
 To get property value use `ObjectAccessor::get`, providing property name as an argument
 ```php
 $propertyValue = $objectAccessor->get('property');
+```
+## Changing property value
+To get property value use `ObjectAccessor::get`, providing property name as first argument and value as second
+```php
+$objectAccessor->set('property', 123);
 ```

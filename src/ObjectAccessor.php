@@ -21,9 +21,16 @@ class ObjectAccessor implements IObjectAccessor
 
     public function has(string $property): bool
     {
-        $this->checkObject();
+        if ($this->object === null) {
+            throw new UninitialisedAccessorException();
+        }
 
-        if (!$this->reflection->hasProperty($property)) {
+        return $this->reflection->hasProperty($property);
+    }
+
+    public function isInitialised(string $property): bool
+    {
+        if (!$this->has($property)) {
             return false;
         }
 
@@ -33,9 +40,7 @@ class ObjectAccessor implements IObjectAccessor
 
     public function get(string $property): mixed
     {
-        $this->checkObject();
-
-        if (!$this->has($property)) {
+        if (!$this->isInitialised($property)) {
             return null;
         }
         $property = $this->reflection->getProperty($property);
@@ -44,16 +49,25 @@ class ObjectAccessor implements IObjectAccessor
         return $property->getValue($this->object);
     }
 
-    /**
-     * Checks whether accessor was initialised
-     * 
-     * @throws UninitialisedAccessorException if object access wasn't initialised
-     */
-    private function checkObject()
+    public function set(string $property, mixed $value): IObjectAccessor
+    {
+        if (!$this->has($property)) {
+            throw new PropertyNotFoundException($property, $this->reflection->getName());
+        }
+
+        $property = $this->reflection->getProperty($property);
+        $property->setAccessible(true);
+        $property->setValue($this->object, $value);
+        return $this;
+    }
+
+    public function getObject(): object
     {
         if ($this->object === null) {
             throw new UninitialisedAccessorException();
         }
-    }
 
+        return $this->object;
+    }
+    
 }
