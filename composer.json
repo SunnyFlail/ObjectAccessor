@@ -1,0 +1,15 @@
+{
+    "name": "sunnyflail/object-accessor",
+    "description": "A simple abstraction over accessing object properties",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "SunnyFlail\\ObjectAccessor\\": "src"
+        }
+    },
+    "config": {
+        "classmap-authoritative": true
+    },
+    "require": {}
+}
